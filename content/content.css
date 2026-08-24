@@ -1,0 +1,32 @@
+/**
+ * DIO - Controle de Legendas
+ * content.css - Regras de estilo para desbloqueio do player e ocultação de legendas
+ */
+
+/* 1. Desbloqueia pointer-events no wrapper do player Clappr/YouTube embutido pela DIO */
+.clappr-youtube-plugin[data-youtube-plugin],
+[data-player] > div[style*="pointer-events: none"],
+div[data-player] [style*="pointer-events: none"],
+div[style*="pointer-events: none"] > iframe[src*="youtube.com"] {
+  pointer-events: auto !important;
+}
+
+/* 2. Ocultação CSS instantânea quando a classe dio-subtitles-disabled estiver ativa no root */
+html.dio-subtitles-disabled ::cue,
+body.dio-subtitles-disabled ::cue {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
+/* Oculta sobreposições de legendas conhecidas (Video.js, Plyr, YouTube overlays se acessíveis) */
+html.dio-subtitles-disabled .vjs-text-track-display,
+html.dio-subtitles-disabled .plyr__captions,
+html.dio-subtitles-disabled [class*="subtitle"],
+html.dio-subtitles-disabled [class*="caption"],
+html.dio-subtitles-disabled .ytp-caption-window-container,
+html.dio-subtitles-disabled .caption-window {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}

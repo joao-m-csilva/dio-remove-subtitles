@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <defs>
+    <linearGradient id="dioGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8B5CF6"/>
+      <stop offset="100%" stop-color="#EC4899"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#8B5CF6" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+  
+  <!-- Background Rounded Rect -->
+  <rect x="8" y="8" width="112" height="112" rx="28" fill="url(#dioGrad)" filter="url(#shadow)" />
+  
+  <!-- Screen border -->
+  <rect x="22" y="26" width="84" height="64" rx="10" fill="#0D0E15" />
+  
+  <!-- Subtitle lines inside screen -->
+  <rect x="34" y="66" width="34" height="6" rx="3" fill="#A78BFA" />
+  <rect x="72" y="66" width="22" height="6" rx="3" fill="#A78BFA" />
+  <rect x="34" y="76" width="20" height="6" rx="3" fill="#A78BFA" />
+  <rect x="58" y="76" width="36" height="6" rx="3" fill="#A78BFA" />
+
+  <!-- Play triangle badge -->
+  <polygon points="56,40 76,51 56,62" fill="#FFFFFF" opacity="0.9" />
+
+  <!-- Stand / base -->
+  <path d="M48 100 L80 100" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" />
+</svg>

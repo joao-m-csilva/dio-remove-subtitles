@@ -1,0 +1,41 @@
+{
+  "manifest_version": 3,
+  "name": "DIO - Controle de Legendas",
+  "version": "1.0.0",
+  "description": "Ative ou desative facilmente as legendas nos vídeos e bootcamps da DIO (dio.me).",
+  "permissions": [
+    "storage"
+  ],
+  "host_permissions": [
+    "*://*.dio.me/*"
+  ],
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_title": "DIO - Controle de Legendas",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.dio.me/*"
+      ],
+      "js": [
+        "content/content.js"
+      ],
+      "css": [
+        "content/content.css"
+      ],
+      "run_at": "document_start",
+      "all_frames": true
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DIO - Controle de Legendas</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <div class="brand">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="4" width="20" height="16" rx="2.5" />
+            <path d="M7 15h4M15 15h2M7 11h2M13 11h4" />
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1>DIO Subtitles</h1>
+          <span class="version-badge">v1.0.0</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Control Card -->
+    <main class="main-card">
+      <div class="control-row">
+        <div class="control-info">
+          <span class="control-title">Ocultar Legendas</span>
+          <span class="control-desc">Desativa legendas automáticas nos vídeos e aulas</span>
+        </div>
+        <label class="switch" for="toggle-switch">
+          <input type="checkbox" id="toggle-switch" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <!-- Status Indicator -->
+      <div id="status-box" class="status-box status-active">
+        <span class="status-dot"></span>
+        <span id="status-text" class="status-text">Legendas Desativadas</span>
+      </div>
+    </main>
+
+    <!-- Quick Info -->
+    <div class="info-section">
+      <div class="info-item">
+        <svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 2A29 29 0 0 0 1 11.75a29 29 0 0 0 .46 5.33A2.78 2.78 0 0 0 3.4 19c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-2 29 29 0 0 0 .46-5.25 29 29 0 0 0-.46-5.33z" />
+          <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02" fill="currentColor" />
+        </svg>
+        <span>Compatível com Clappr e YouTube IFrame</span>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <span>Feito para a comunidade DIO</span>
+    </footer>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
