@@ -1,17 +1,16 @@
 /**
  * DIO - Controle de Legendas
- * content.css - Regras de estilo para desbloqueio do player e ocultação de legendas
+ * content.css - Regras de estilo seguras e escopadas exclusivamente para players de vídeo
  */
 
-/* 1. Desbloqueia pointer-events no wrapper do player Clappr/YouTube embutido pela DIO */
+/* 1. Desbloqueia pointer-events no wrapper específico do player Clappr/YouTube */
 .clappr-youtube-plugin[data-youtube-plugin],
-[data-player] > div[style*="pointer-events: none"],
-div[data-player] [style*="pointer-events: none"],
-div[style*="pointer-events: none"] > iframe[src*="youtube.com"] {
+[data-player] div[style*="pointer-events: none"],
+.video-player div[style*="pointer-events: none"] {
   pointer-events: auto !important;
 }
 
-/* 2. Ocultação CSS instantânea quando a classe dio-subtitles-disabled estiver ativa no root */
+/* 2. Ocultação de legendas nativas do elemento <video> */
 html.dio-subtitles-disabled ::cue,
 body.dio-subtitles-disabled ::cue {
   display: none !important;
@@ -19,13 +18,12 @@ body.dio-subtitles-disabled ::cue {
   opacity: 0 !important;
 }
 
-/* Oculta sobreposições de legendas conhecidas (Video.js, Plyr, YouTube overlays se acessíveis) */
+/* 3. Ocultação de overlays de legendas específicas de players (VideoJS, Plyr, YouTube) */
 html.dio-subtitles-disabled .vjs-text-track-display,
 html.dio-subtitles-disabled .plyr__captions,
-html.dio-subtitles-disabled [class*="subtitle"],
-html.dio-subtitles-disabled [class*="caption"],
 html.dio-subtitles-disabled .ytp-caption-window-container,
-html.dio-subtitles-disabled .caption-window {
+html.dio-subtitles-disabled [data-player] .caption-window,
+html.dio-subtitles-disabled .clappr-player .player-captions {
   display: none !important;
   visibility: hidden !important;
   opacity: 0 !important;

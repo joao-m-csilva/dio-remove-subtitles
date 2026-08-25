@@ -1,107 +1,69 @@
-# DIO - Controle de Legendas (Chrome Extension) 🚀
+# DIO - Controle de Legendas
 
-Uma extensão leve e eficiente para Google Chrome (Manifest V3) que permite **ativar ou desativar facilmente as legendas** nos vídeos e bootcamps da plataforma [DIO (dio.me)](https://web.dio.me).
+[![Pair Programmed with Google Antigravity](https://img.shields.io/badge/Pair%20Programmed%20with-Google%20Antigravity-8B5CF6?style=for-the-badge&logo=google&logoColor=white)](https://github.com/joao-m-csilva/dio-remove-subtitles)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](LICENSE)
 
----
+Extensão para Google Chrome (Manifest V3) que permite desativar ou ativar legendas nos vídeos e cursos da DIO ([dio.me](https://web.dio.me)).
 
-## 🎯 Por que esta extensão existe?
+## O que a extensão faz
 
-Na plataforma da DIO, muitas aulas e bootcamps utilizam o player **Clappr com o player do YouTube embutido**, configurado com atributos que ativam as legendas automaticamente e bloqueiam a interação direta com os controles (`pointer-events: none`).
+Muitos cursos da DIO utilizam o player do YouTube embutido com legendas ativadas por padrão e controles nativos bloqueados (`pointer-events: none`). Esta extensão:
 
-Esta extensão resolve o problema de forma definitiva e automática:
-- **Desativação automática**: Ao carregar qualquer aula ou trocar de vídeo (SPA), as legendas são desativadas de imediato.
-- **Chave Liga/Desliga (ON/OFF)**: Alterne entre ocultar ou exibir legendas a qualquer momento pelo menu da extensão.
-- **Sincronização em tempo real**: O efeito é instantâneo na página aberta, sem necessidade de recarregar (F5).
-- **Desbloqueio de interação**: Permite interação com a área do player de vídeo.
-- **Compatibilidade total**: Funciona tanto em vídeos do YouTube (via `postMessage` da YouTube Player API) quanto em players HTML5 (`<video>` e `<track>`).
+- Desativa as legendas automaticamente ao iniciar os vídeos.
+- Oferece um menu popup com botão liga/desliga para alternar a exibição a qualquer momento.
+- Desbloqueia a área do player para permitir cliques e interação com o vídeo.
+- Funciona em navegação de página única (SPA), aplicando a preferência ao trocar de aula sem precisar recarregar a página.
+- Mantém sua preferência salva no navegador.
 
----
+## Instalação
 
-## 📦 Como Instalar no Google Chrome (ou Brave / Edge / Opera)
+### Opção 1: Download via ZIP
 
-Como a extensão está em formato de código aberto, você pode instalá-la em segundos via **Modo de Desenvolvedor**:
+1. Baixe o arquivo da extensão: [dio-remove-subtitles-v1.0.1.zip](https://github.com/joao-m-csilva/dio-remove-subtitles/releases/download/v1.0.1/dio-remove-subtitles-v1.0.1.zip)
+2. Extraia o arquivo `.zip` no seu computador.
+3. No Chrome, acesse `chrome://extensions/`.
+4. Ative a opção **Modo do desenvolvedor** (canto superior direito).
+5. Clique em **Carregar sem compactação** (canto superior esquerdo) e selecione a pasta extraída.
 
-1. Faça o clone deste repositório ou baixe os arquivos para o seu computador:
-   ```bash
-   git clone https://github.com/SEU_USUARIO/dio-remove-subtracks.git
-   ```
-2. Abra o Google Chrome e acesse `chrome://extensions/` na barra de endereços.
-3. No canto superior direito da página, ative a chave **"Modo do desenvolvedor"** (*Developer mode*).
-4. No canto superior esquerdo, clique no botão **"Carregar sem compactação"** (*Load unpacked*).
-5. Selecione a pasta deste projeto (`dio-remove-subtracks`).
-6. **Pronto!** O ícone da extensão aparecerá na sua barra de extensões do Chrome.
+### Opção 2: Via Git
 
-> 💡 **Dica**: Clique no ícone de quebra-cabeça das extensões no Chrome e fixe o **DIO - Controle de Legendas** na barra superior para acesso rápido.
-
----
-
-## ⚙️ Como Usar
-
-1. Acesse o site da [DIO](https://web.dio.me) e entre em qualquer bootcamp ou aula com vídeo.
-2. Por padrão, a extensão já estará ativa e as legendas serão desativadas automaticamente.
-3. Para ligar ou desligar as legendas:
-   - Clique no ícone da extensão na barra do navegador.
-   - Use o interruptor **"Ocultar Legendas"** para ativar ou desativar.
-   - A alteração é refletida no player imediatamente.
-
----
-
-## 🛠️ Arquitetura do Projeto
-
+```bash
+git clone https://github.com/joao-m-csilva/dio-remove-subtitles.git
 ```
-dio-remove-subtracks/
-├── manifest.json            # Configuração do Manifest V3 (permissões, popup e scripts)
-├── popup/
-│   ├── popup.html           # Interface visual do popup
-│   ├── popup.css            # Estilos (Dark Theme + cores DIO)
-│   └── popup.js             # Lógica de controle do switch e chrome.storage
+No Chrome, acesse `chrome://extensions/`, clique em **Carregar sem compactação** e selecione a pasta do projeto.
+
+## Como usar
+
+1. Abra qualquer aula com vídeo na DIO.
+2. As legendas serão desativadas automaticamente.
+3. Para ativar ou desativar manualmente, clique no ícone da extensão na barra do navegador e alterne a chave.
+
+## Estrutura do projeto
+
+```text
+dio-remove-subtitles/
+├── AGENTS.md
+├── LICENSE
+├── README.md
+├── manifest.json
 ├── content/
-│   ├── content.js           # Comunicação com a YouTube Player API e HTML5 tracks
-│   └── content.css          # Desbloqueio de pointer-events e ocultação CSS
+│   ├── content.css
+│   └── content.js
 ├── icons/
-│   ├── icon16.png           # Ícones da extensão
+│   ├── icon.svg
+│   ├── icon16.png
 │   ├── icon48.png
-│   ├── icon128.png
-│   └── icon.svg             # Vetorial fonte
-└── README.md                # Documentação
+│   └── icon128.png
+└── popup/
+    ├── popup.css
+    ├── popup.html
+    └── popup.js
 ```
 
----
+## Desenvolvimento e IHC
 
-## 🧠 Como Funciona por Baixo dos Panos
+Projeto desenvolvido aplicando conceitos de Interação Humano-Computador (IHC) — em especial a Heurística de Controle do Usuário e a Lei de Fitts — em pair programming com o **Google Antigravity**.
 
-1. **Comunicação com a YouTube IFrame API**:
-   O `content.js` envia comandos diretos para o `contentWindow` do iframe via `postMessage`:
-   ```javascript
-   // Desativar legendas:
-   iframe.contentWindow.postMessage(JSON.stringify({
-     event: 'command',
-     func: 'setOption',
-     args: ['captions', 'track', {}]
-   }), '*');
+## Licença
 
-   // Ativar legendas:
-   iframe.contentWindow.postMessage(JSON.stringify({
-     event: 'command',
-     func: 'setOption',
-     args: ['captions', 'track', { languageCode: 'pt' }]
-   }), '*');
-   ```
-
-2. **Monitoramento de Single Page Application (SPA)**:
-   Utiliza um `MutationObserver` no DOM para detectar a navegação entre aulas sem recarregamento de página, reaplicando automaticamente as preferências do usuário.
-
-3. **Persistência de Preferências**:
-   Usa a API nativa `chrome.storage.sync` para sincronizar o estado da chave ON/OFF entre sessões e abas.
-
----
-
-## 🤝 Contribuições
-
-Contribuições, issues e sugestões são super bem-vindas! Sinta-se à vontade para abrir uma *Issue* ou enviar um *Pull Request*.
-
----
-
-## 📄 Licença
-
-Distribuído sob a licença MIT. Veja `LICENSE` para mais detalhes.
+[MIT](LICENSE)
