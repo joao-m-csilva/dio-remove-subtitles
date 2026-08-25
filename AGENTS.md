@@ -1,56 +1,101 @@
-# Diretrizes para Agentes de IA (AGENTS.md)
+# AGENTS.md - Development Rules & Guidelines
 
-Este documento define padrões arquiteturais, de código, escrita e empacotamento para agentes de IA e desenvolvedores que colaboram neste repositório.
-
----
-
-## 1. Tom de Escrita e Documentação
-- **Sem texto "IArizado"**: Evite excesso de emojis, frases de marketing infladas, adjetivos exagerados ("revolucionário", "robusto", "mágico") e explicações condescendentes entre parênteses.
-- **Clareza e concisão**: Escreva documentações, comentários e mensagens de commit de forma direta, humana e orientada à ação.
-- **Foco no usuário**: Instruções de instalação devem ser simples e sem jargões desnecessários para quem não é da área técnica.
-- **Atualização da Arquitetura**: Sempre utilize o comando `tree` (ex: `tree -I ".git*|*.zip*"`) para gerar e atualizar a árvore de estrutura de arquivos no `README.md` quando houver modificações nos arquivos do projeto.
+These guidelines apply to all AI agents, contributors, and automated tooling working within this repository.
 
 ---
 
-## 2. Arquitetura e Regras para Extensão Chrome (Manifest V3)
+## 1. General Principles
 
-### A. Segurança com React / Next.js (SPA)
-- A plataforma DIO utiliza Next.js com renderização SSR/SSG e hidratação no cliente.
-- **Momento de Injeção**: Scripts de conteúdo devem usar `"run_at": "document_idle"`. Nunca utilize `document_start` para manipular o DOM de forma que conflite com o ciclo de hidratação do React (risco de tela branca / hydration failure).
-- **Tratamento defensivo**: Qualquer manipulação de DOM ou chamada de API (`postMessage`, `chrome.storage`) deve estar envolvida em blocos `try/catch` para garantir que erros nunca afetem a aplicação hospedeira.
-- **MutationObserver**: Sempre aplique *debounce* ao escutar mutações e filtre apenas nós relevantes (`iframe`, `video`, `[data-player]`).
-
-### B. Escopo de CSS Rigoroso
-- **Nunca use seletores genéricos** como `[class*="subtitle"]` ou `[class*="caption"]` no escopo global. No styled-components / Tailwind, isso pode ocultar blocos inteiros da página.
-- Restrinja estilos exclusivamente a tags nativas (`::cue`), containers conhecidos de players (`[data-player]`, `.clappr-player`) e classes de controle inseridas pela extensão (`html.dio-subtitles-disabled`).
-
-### C. Controle do Player YouTube
-- A comunicação com o player do YouTube dentro do iframe deve ser feita via `postMessage`:
-  - Desativar legendas: `args: ['captions', 'track', {}]`
-  - Ativar legendas: `args: ['captions', 'track', { languageCode: 'pt' }]`
+- **Simplicity and Maintainability**: Prioritize clean, readable, and performant code over premature optimization or unnecessary abstractions.
+- **Inspect Before Modifying**: Always analyze existing project files, architectural patterns, and dependencies before creating or altering code.
+- **Dead Code Elimination**: Remove unused imports, dead functions, obsolete styles, and dangling files when updating features.
+- **Natural Tone**: Avoid inflated marketing jargon, buzzwords, or condescending parenthetical remarks in documentation and commit messages.
 
 ---
 
-## 3. Padrão de Empacotamento e Releases (ZIP Flat)
-- **Estrutura Flat na Raiz**: O arquivo `.zip` da release deve conter os arquivos (`manifest.json`, `content/`, `popup/`, `icons/`, `README.md`, `LICENSE`, `AGENTS.md`) **diretamente na raiz do arquivo compactado**.
-- **Evitar subpastas na raiz do ZIP**: Ferramentas nativas do Windows ("Extrair Tudo...") criam uma pasta com o nome do arquivo. Se o ZIP contiver outra subpasta dentro, o Chrome não encontrará o `manifest.json` no primeiro nível.
-- **Comando correto de empacotamento**:
+## 2. Code Comments
+
+- **Language**: All code comments must be written strictly in **English**.
+- **Relevance**: Comments should only exist to clarify non-obvious architectural decisions, API quirks, browser compatibility workarounds, or complex logic.
+- **No Obvious Comments**: Do not write comments that merely restate what the code clearly does.
+- **Cleanliness**: Keep comments concise and avoid visual clutter.
+
+---
+
+## 3. Chrome Extension (Manifest V3) Architecture
+
+### A. SPA and React/Next.js Compatibility
+- The target platform ([dio.me](https://web.dio.me)) is a Single Page Application built with Next.js and React SSR/SSG.
+- **Injection Timing**: Content scripts must be registered with `"run_at": "document_idle"`. Never inject DOM mutations at `document_start`, as mutating elements before or during React hydration will trigger hydration errors and cause blank screen crashes.
+- **Defensive Programming**: Wrap all DOM queries, `postMessage` dispatches, and `chrome.storage` calls inside `try/catch` blocks to prevent unhandled exceptions from affecting host page execution.
+- **Performance & Debounce**: Debounce `MutationObserver` callbacks and verify that added nodes specifically include video elements or player wrappers (`iframe`, `video`, `[data-player]`) before executing state changes.
+
+### B. Scoped CSS Rules
+- **Never use broad generic attribute selectors** (such as `[class*="subtitle"]` or `[class*="caption"]`) globally. In Styled-Components and utility CSS frameworks, these match top-level layout wrappers and will inadvertently hide entire sections of the page.
+- Restrict styles strictly to native tags (`::cue`), player-specific containers (`[data-player]`, `.clappr-player`), and extension-controlled root classes (`html.dio-subtitles-disabled`).
+
+### C. YouTube IFrame Player Communication
+- Communicate with embedded YouTube players through the `postMessage` protocol:
+  - Disable subtitles: `args: ['captions', 'track', {}]`
+  - Enable subtitles: `args: ['captions', 'track', { languageCode: 'pt' }]`
+
+---
+
+## 4. UI & Styling
+
+- Maintain a clean, responsive, and lightweight popup interface.
+- Do not use emojis as functional UI icons; use clean SVGs or standard icon assets.
+- Rely on standard CSS and CSS variables without adding third-party UI dependencies.
+- Ensure all interactive controls have accessible labels and clear visual feedback states.
+
+---
+
+## 5. Documentation & Architecture Maintenance
+
+- Keep `README.md` direct, concise, and focused on user value.
+- **Tree Command Standard**: Whenever project files or directory structures are added, removed, or renamed, always run:
+  ```bash
+  tree -I ".git*|*.zip*"
+  ```
+  Use the exact terminal output to update the `## Estrutura do projeto` section in `README.md`.
+
+---
+
+## 6. Packaging and Release Standards (Flat Root ZIP)
+
+- **Flat Archive Root**: Release `.zip` files must contain the extension files (`manifest.json`, `content/`, `popup/`, `icons/`, `README.md`, `LICENSE`, `AGENTS.md`) **directly at the root of the archive**, without an enclosing parent directory.
+- **Windows Extraction Compatibility**: Built-in archive extractors (such as Windows "Extract All") create a folder matching the archive name. If the archive already contains a root folder, the resulting nested directory breaks Chrome's "Load unpacked" extension discovery (`manifest.json missing`).
+- **Standard Packaging Command**:
   ```bash
   zip -r dio-remove-subtitles-vX.X.X.zip manifest.json content popup icons README.md LICENSE AGENTS.md
   ```
 
 ---
 
-## 4. Padrões de Git e Histórico
-- Utilize o padrão **Conventional Commits**:
-  - `feat:` para novas funcionalidades.
-  - `fix:` para correções de bugs.
-  - `docs:` para documentação.
-  - `refactor:` para melhorias de código sem mudança de comportamento.
-- Evite poluir o histórico com múltiplos micro-commits desnecessários; faça squash ou rebase antes de finalizar alterações simples.
+## 7. Git & Commit Standards
+
+- Follow the **Conventional Commits** specification:
+  - `feat:` for new capabilities.
+  - `fix:` for bug fixes.
+  - `docs:` for documentation updates.
+  - `refactor:` for code restructuring without behavioral changes.
+- Maintain a clean, linear commit history. Avoid committing temporary files, artifacts, or micro-commits.
 
 ---
 
-## 5. Princípios de Acessibilidade e IHC
-- Respeite a **Heurística de Nielsen nº 3 (Controle e Liberdade do Usuário)**: A extensão deve sempre permitir ativar e desativar recursos facilmente.
-- Considere a **acessibilidade cognitiva e neurodiversidade** (redução de carga visual e sobrecarga sensorial para pessoas no espectro autista e TDAH).
+## 8. Human-Computer Interaction (HCI) & Accessibility
+
+- Uphold **Nielsen's Heuristic #3 (User Control and Freedom)**: Interfaces must provide straightforward mechanisms to toggle preferences and customize settings.
+- Respect cognitive accessibility and neurodiversity: allow users to reduce visual clutter and split-attention effects to maintain focus.
+
+---
+
+## 9. AI Agent Verification Checklist
+
+Before finalizing any task:
+1. [ ] Check that all code comments are in English and only present where necessary.
+2. [ ] Verify that no unhandled exceptions can break host SPA hydration.
+3. [ ] Verify that CSS selectors are strictly scoped to player elements.
+4. [ ] Run `tree -I ".git*|*.zip*"` and synchronize `README.md` if file structure changed.
+5. [ ] Ensure release `.zip` packages are generated with a flat root structure.
+6. [ ] Confirm that Git history remains clean, concise, and semantic.

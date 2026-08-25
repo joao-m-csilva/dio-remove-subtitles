@@ -1,19 +1,13 @@
-/**
- * DIO - Controle de Legendas
- * content.js - Gerencia a desativação/ativação de legendas de forma segura e não-bloqueante
- */
-
 (function () {
   'use strict';
 
-  // Evita múltiplas inicializações no mesmo contexto
+  // Prevent multiple injections within the same context
   if (window.__dioSubtitlesInjected) return;
   window.__dioSubtitlesInjected = true;
 
   let subtitlesDisabled = true;
   let debounceTimeout = null;
 
-  // Carrega a preferência salva no chrome.storage
   function loadPreference() {
     try {
       if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.sync) {
@@ -33,7 +27,6 @@
     }
   }
 
-  // Envia comando para os iframes do YouTube encontrados
   function sendYouTubeCaptionCommand(disable) {
     try {
       const iframes = document.querySelectorAll('iframe[src*="youtube.com"], iframe[id*="yt"], .clappr-youtube-plugin iframe');
@@ -51,15 +44,12 @@
             iframe.contentWindow.postMessage(message, '*');
           }
         } catch (err) {
-          // Silencioso em caso de restrições de cross-origin
+          // Ignore cross-origin restrictions on restricted frames
         }
       });
-    } catch (e) {
-      // Silencioso
-    }
+    } catch (e) {}
   }
 
-  // Desativa/ativa trilhas em elementos HTML5 <video>
   function updateHTML5VideoTracks(disable) {
     try {
       const videos = document.querySelectorAll('video');
@@ -75,7 +65,7 @@
     } catch (e) {}
   }
 
-  // Desbloqueia pointer-events no wrapper da DIO caso esteja bloqueado
+  // Restore mouse interactions on overlays with pointer-events: none
   function unlockPlayerPointerEvents() {
     try {
       const wrappers = document.querySelectorAll('.clappr-youtube-plugin[data-youtube-plugin], [data-player] div[style*="pointer-events"]');
@@ -87,10 +77,8 @@
     } catch (e) {}
   }
 
-  // Aplica o estado de legendas atual de forma segura
   function applySubtitleState(disable) {
     try {
-      // 1. Atualiza classe no root para controle via CSS
       if (document.documentElement) {
         if (disable) {
           document.documentElement.classList.add('dio-subtitles-disabled');
@@ -99,20 +87,13 @@
         }
       }
 
-      // 2. Desbloqueia interações no player
       unlockPlayerPointerEvents();
-
-      // 3. Envia comando para YouTube Iframes
       sendYouTubeCaptionCommand(disable);
-
-      // 4. Atualiza tracks em HTML5 videos
       updateHTML5VideoTracks(disable);
-    } catch (e) {
-      // Silencioso
-    }
+    } catch (e) {}
   }
 
-  // Executa com debounce para não impactar a renderização da página
+  // Debounce to prevent layout thrashing during React/Next.js hydration
   function debouncedApply() {
     if (debounceTimeout) clearTimeout(debounceTimeout);
     debounceTimeout = setTimeout(() => {
@@ -120,7 +101,7 @@
     }, 200);
   }
 
-  // Agenda tentativas escalonadas para dar tempo ao iframe do YouTube inicializar
+  // Retry application across staggered delays to accommodate asynchronous player initialization
   function triggerScheduledApplications() {
     [300, 800, 1800, 3500].forEach((delay) => {
       setTimeout(() => {
@@ -129,7 +110,7 @@
     });
   }
 
-  // Observa mutações no DOM para detectar navegação entre aulas (SPA)
+  // Observe SPA route transitions and dynamic player mounts
   function initObserver() {
     try {
       const target = document.body || document.documentElement;
@@ -140,7 +121,7 @@
         for (const mutation of mutations) {
           if (mutation.addedNodes.length > 0) {
             for (const node of mutation.addedNodes) {
-              if (node.nodeType === 1) { // ELEMENT_NODE
+              if (node.nodeType === 1) {
                 if (
                   node.tagName === 'IFRAME' ||
                   node.tagName === 'VIDEO' ||
@@ -168,7 +149,6 @@
     } catch (e) {}
   }
 
-  // Ouve mudanças diretas nas preferências via storage
   try {
     if (typeof chrome !== 'undefined' && chrome.storage && chrome.storage.onChanged) {
       chrome.storage.onChanged.addListener((changes, areaName) => {
@@ -181,7 +161,6 @@
     }
   } catch (e) {}
 
-  // Ouve mensagens diretas do popup
   try {
     if (typeof chrome !== 'undefined' && chrome.runtime && chrome.runtime.onMessage) {
       chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
@@ -195,11 +174,9 @@
     }
   } catch (e) {}
 
-  // Escuta eventos de reprodução
   document.addEventListener('play', () => debouncedApply(), true);
   document.addEventListener('loadeddata', () => debouncedApply(), true);
 
-  // Inicializa quando a página estiver pronta
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', () => {
       loadPreference();
