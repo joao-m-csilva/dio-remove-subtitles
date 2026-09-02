@@ -50,7 +50,7 @@ These guidelines apply to all AI agents, contributors, and automated tooling wor
 
 ---
 
-## 5. Documentation & Architecture Maintenance
+## 5. Documentation & README.md Guidelines
 
 - Keep `README.md` direct, concise, and focused on user value.
 - **Tree Command Standard**: Whenever project files or directory structures are added, removed, or renamed, always run:
@@ -58,6 +58,12 @@ These guidelines apply to all AI agents, contributors, and automated tooling wor
   tree -I ".git*|*.zip*"
   ```
   Use the exact terminal output to update the `## Estrutura do projeto` section in `README.md`.
+- **Mandatory Footer Quote**: Whenever creating or updating a `README.md` file in this project, you must include the following highlighted blockquote at the very end of the document as a closing statement/footer:
+  ```markdown
+  ---
+
+  > *"O valor de construir o seu próprio software não está apenas no resultado final que roda na tela, mas na reconfiguração física que acontece no seu cérebro durante o processo de criação."*
+  ```
 
 ---
 
@@ -111,5 +117,6 @@ Before finalizing any task:
 3. [ ] Verify that CSS selectors are strictly scoped to player elements.
 4. [ ] Run the **Extension Verification Protocol** (or automated tests if available).
 5. [ ] Run `tree -I ".git*|*.zip*"` and synchronize `README.md` if file structure changed.
-6. [ ] Ensure release `.zip` packages are generated with a flat root structure.
-7. [ ] Confirm that Git history remains clean, concise, and semantic.
+6. [ ] Ensure the mandatory closing quote is appended to the end of `README.md`.
+7. [ ] Ensure release `.zip` packages are generated with a flat root structure.
+8. [ ] Confirm that Git history remains clean, concise, and semantic.

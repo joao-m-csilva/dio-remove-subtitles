@@ -67,3 +67,8 @@ Projeto desenvolvido aplicando conceitos de Interação Humano-Computador (IHC) 
 ## Licença
 
 [MIT](LICENSE)
+
+---
+
+> *"O valor de construir o seu próprio software não está apenas no resultado final que roda na tela, mas na reconfiguração física que acontece no seu cérebro durante o processo de criação."*
+
