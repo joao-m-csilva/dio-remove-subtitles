@@ -72,30 +72,44 @@ These guidelines apply to all AI agents, contributors, and automated tooling wor
 
 ---
 
-## 7. Git & Commit Standards
+## 7. Testing & Quality Assurance
+
+- **Behavior Over Implementation**: Tests must validate user behavior, outcomes, and edge cases rather than private implementation details.
+- **Non-Trivial Logic**: Any new module or utility function containing complex state transitions, data transformations, or parsing must be accompanied by automated unit tests.
+- **Extension Verification Protocol**:
+  1. **Unpacked Load Verification**: Load in `chrome://extensions/` with Developer Mode to ensure `manifest.json` parses without warnings.
+  2. **SPA Route Navigation**: Switch between course modules dynamically on [dio.me](https://web.dio.me) to confirm that `MutationObserver` hooks re-apply caption states.
+  3. **Storage Persistence**: Toggle the popup switch, restart the browser or reload the tab, and verify that preferences persist via `chrome.storage.sync`.
+  4. **Host Console Integrity**: Ensure no uncaught exceptions, infinite mutation loops, or CSP violations appear in the DevTools console.
+
+---
+
+## 8. Git & Commit Standards
 
 - Follow the **Conventional Commits** specification:
   - `feat:` for new capabilities.
   - `fix:` for bug fixes.
   - `docs:` for documentation updates.
   - `refactor:` for code restructuring without behavioral changes.
+  - `test:` for adding or updating tests.
 - Maintain a clean, linear commit history. Avoid committing temporary files, artifacts, or micro-commits.
 
 ---
 
-## 8. Human-Computer Interaction (HCI) & Accessibility
+## 9. Human-Computer Interaction (HCI) & Accessibility
 
 - Uphold **Nielsen's Heuristic #3 (User Control and Freedom)**: Interfaces must provide straightforward mechanisms to toggle preferences and customize settings.
 - Respect cognitive accessibility and neurodiversity: allow users to reduce visual clutter and split-attention effects to maintain focus.
 
 ---
 
-## 9. AI Agent Verification Checklist
+## 10. AI Agent Verification Checklist
 
 Before finalizing any task:
 1. [ ] Check that all code comments are in English and only present where necessary.
 2. [ ] Verify that no unhandled exceptions can break host SPA hydration.
 3. [ ] Verify that CSS selectors are strictly scoped to player elements.
-4. [ ] Run `tree -I ".git*|*.zip*"` and synchronize `README.md` if file structure changed.
-5. [ ] Ensure release `.zip` packages are generated with a flat root structure.
-6. [ ] Confirm that Git history remains clean, concise, and semantic.
+4. [ ] Run the **Extension Verification Protocol** (or automated tests if available).
+5. [ ] Run `tree -I ".git*|*.zip*"` and synchronize `README.md` if file structure changed.
+6. [ ] Ensure release `.zip` packages are generated with a flat root structure.
+7. [ ] Confirm that Git history remains clean, concise, and semantic.
